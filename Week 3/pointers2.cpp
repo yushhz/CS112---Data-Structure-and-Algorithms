@@ -1,3 +1,7 @@
+// Author: Ayush Kirpal
+// Date created: 05/08/2026
+// Pointers in C++ (Week 3 Lecture 2)
+
 #include <iostream>
 
 // pbv - Pass by value
@@ -21,7 +25,7 @@ int main()
   cout << "B4 function call : pbv, refVar, ptrVar: " << endl;
   cout << pbv << ", " << refVar << ", " << *ptrVar << endl;
 
-  f(ptrVar); // Pass by reference
+  f(&pbv); // Pass by reference
 
   cout << "after function call: " << endl;
   cout << pbv << ", " << refVar << ", " << *ptrVar << endl;
