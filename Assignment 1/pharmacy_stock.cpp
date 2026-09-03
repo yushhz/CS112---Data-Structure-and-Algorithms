@@ -34,9 +34,8 @@ struct Medicine
     int unitsAvailable;
 };
 
-// ---------------------------------------------------------------------
 // Function prototypes
-// ---------------------------------------------------------------------
+
 int readMedicinesFromFile(const string &filename, Medicine medicines[], int maxSize);
 string getStatus(int units);
 void updateMedicineUnits(Medicine medicines[], int count);
@@ -47,9 +46,7 @@ double calculateOutOfStockPercentage(const Medicine medicines[], int count);
 void printFullReport(const Medicine medicines[], int count);
 void displayMenu();
 
-// ---------------------------------------------------------------------
 // main
-// ---------------------------------------------------------------------
 int main()
 {
     Medicine medicines[MAX_MEDICINES];
@@ -101,9 +98,7 @@ int main()
     return 0;
 }
 
-// ---------------------------------------------------------------------
 // Displays the main menu
-// ---------------------------------------------------------------------
 void displayMenu()
 {
     cout << "\n===== USP Pharmacy Stock Management =====" << endl;
@@ -113,11 +108,9 @@ void displayMenu()
     cout << "Enter your choice: ";
 }
 
-// ---------------------------------------------------------------------
 // Reads medicine records from the given file into the array.
 // Each line in the file is expected in the format: ID,Name,Units
 // Returns the number of records successfully read.
-// ---------------------------------------------------------------------
 int readMedicinesFromFile(const string &filename, Medicine medicines[], int maxSize)
 {
     ifstream inFile(filename.c_str());
@@ -156,9 +149,7 @@ int readMedicinesFromFile(const string &filename, Medicine medicines[], int maxS
     return count;
 }
 
-// ---------------------------------------------------------------------
 // Calculates (does NOT store) the status of a medicine based on units.
-// ---------------------------------------------------------------------
 string getStatus(int units)
 {
     if (units > 0)
@@ -173,9 +164,7 @@ string getStatus(int units)
     }
 }
 
-// ---------------------------------------------------------------------
 // Allows the user to update the units of a medicine identified by ID.
-// ---------------------------------------------------------------------
 void updateMedicineUnits(Medicine medicines[], int count)
 {
     int searchId;
@@ -215,9 +204,7 @@ void updateMedicineUnits(Medicine medicines[], int count)
     }
 }
 
-// ---------------------------------------------------------------------
 // Prints a table of all medicines: ID, Name, Status
-// ---------------------------------------------------------------------
 void printMedicineTable(const Medicine medicines[], int count)
 {
     cout << "\n---------------------------------------------------------------" << endl;
@@ -236,9 +223,7 @@ void printMedicineTable(const Medicine medicines[], int count)
     cout << "---------------------------------------------------------------" << endl;
 }
 
-// ---------------------------------------------------------------------
 // Returns the sum of units available across all medicines.
-// ---------------------------------------------------------------------
 int calculateTotalUnits(const Medicine medicines[], int count)
 {
     int total = 0;
@@ -251,9 +236,7 @@ int calculateTotalUnits(const Medicine medicines[], int count)
     return total;
 }
 
-// ---------------------------------------------------------------------
 // Returns the array index of the medicine with the highest units.
-// ---------------------------------------------------------------------
 int findMedicineWithHighestUnits(const Medicine medicines[], int count)
 {
     int maxIndex = 0;
@@ -269,9 +252,7 @@ int findMedicineWithHighestUnits(const Medicine medicines[], int count)
     return maxIndex;
 }
 
-// ---------------------------------------------------------------------
 // Returns the percentage of medicines that are out of stock.
-// ---------------------------------------------------------------------
 double calculateOutOfStockPercentage(const Medicine medicines[], int count)
 {
     int outOfStockCount = 0;
@@ -292,13 +273,11 @@ double calculateOutOfStockPercentage(const Medicine medicines[], int count)
     return (static_cast<double>(outOfStockCount) / count) * 100.0;
 }
 
-// ---------------------------------------------------------------------
 // Prints the complete stock report requested in the assignment:
 // - table of all medicines
 // - total units in stock
 // - medicine with highest units (full details)
 // - percentage of medicines out of stock
-// ---------------------------------------------------------------------
 void printFullReport(const Medicine medicines[], int count)
 {
     printMedicineTable(medicines, count);
