@@ -38,15 +38,16 @@ const int MAX_MEDICINES = 100; // maximum number of medicines the array can hold
 const string DATA_FILE = "medicines.txt";
 
 // Menu options
-const int MENU_UPDATE_UNITS = 1;
-const int MENU_PRINT_REPORT = 2;
+const int MENU_PRINT_REPORT = 1;
+const int MENU_UPDATE_UNITS = 2;
 const int MENU_EXIT = 3;
 
 // Table formatting
 const int ID_COLUMN_WIDTH = 10;
 const int NAME_COLUMN_WIDTH = 25;
+const int UNITS_COLUMN_WIDTH = 10;
 const int STATUS_COLUMN_WIDTH = 25;
-const int TABLE_WIDTH = ID_COLUMN_WIDTH + NAME_COLUMN_WIDTH + STATUS_COLUMN_WIDTH;
+const int TABLE_WIDTH = ID_COLUMN_WIDTH + NAME_COLUMN_WIDTH + UNITS_COLUMN_WIDTH + STATUS_COLUMN_WIDTH;
 
 // Stock rules
 const int OUT_OF_STOCK_UNITS = 0;
@@ -63,7 +64,8 @@ struct Medicine
     int unitsAvailable;
 };
 
-// Function prototypes/declarations
+// Function prototypes
+
 int readMedicinesFromFile(const string &filename, Medicine medicines[], int maxSize);
 string getStatus(int units);
 void updateMedicineUnits(Medicine medicines[], int count);
@@ -131,8 +133,8 @@ int main()
 void displayMenu()
 {
     cout << "\n===== USP Pharmacy Stock Management =====" << endl;
-    cout << "1. Update units for a medicine" << endl;
-    cout << "2. Print stock report" << endl;
+    cout << "1. Print stock report" << endl;
+    cout << "2. Update units for a medicine" << endl;
     cout << "3. Exit" << endl;
     cout << "Enter your choice: ";
 }
@@ -242,6 +244,7 @@ void printMedicineTable(const Medicine medicines[], int count)
          << separator << endl;
     cout << left << setw(ID_COLUMN_WIDTH) << "ID"
          << setw(NAME_COLUMN_WIDTH) << "Name"
+         << setw(UNITS_COLUMN_WIDTH) << "Units"
          << setw(STATUS_COLUMN_WIDTH) << "Status" << endl;
     cout << separator << endl;
 
@@ -249,6 +252,7 @@ void printMedicineTable(const Medicine medicines[], int count)
     {
         cout << left << setw(ID_COLUMN_WIDTH) << medicines[i].id
              << setw(NAME_COLUMN_WIDTH) << medicines[i].name
+             << setw(UNITS_COLUMN_WIDTH) << medicines[i].unitsAvailable
              << setw(STATUS_COLUMN_WIDTH) << getStatus(medicines[i].unitsAvailable) << endl;
     }
 
