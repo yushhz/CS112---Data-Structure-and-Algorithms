@@ -37,6 +37,24 @@ using namespace std;
 const int MAX_MEDICINES = 100; // maximum number of medicines the array can hold
 const string DATA_FILE = "medicines.txt";
 
+// Menu options
+const int MENU_UPDATE_UNITS = 1;
+const int MENU_PRINT_REPORT = 2;
+const int MENU_EXIT = 3;
+
+// Table formatting
+const int ID_COLUMN_WIDTH = 10;
+const int NAME_COLUMN_WIDTH = 25;
+const int STATUS_COLUMN_WIDTH = 25;
+const int TABLE_WIDTH = ID_COLUMN_WIDTH + NAME_COLUMN_WIDTH + STATUS_COLUMN_WIDTH;
+
+// Stock rules
+const int OUT_OF_STOCK_UNITS = 0;
+const double PERCENTAGE_MULTIPLIER = 100.0;
+
+// Input handling
+const int INPUT_BUFFER_SIZE = 1000;
+
 // Struct definition
 struct Medicine
 {
@@ -84,27 +102,28 @@ int main()
         if (cin.fail())
         {
             cin.clear();
-            cin.ignore(1000, '\n');
+            cin.ignore(INPUT_BUFFER_SIZE, '\n');
             cout << "Invalid input. Please enter a number." << endl;
             continue;
         }
 
         switch (choice)
         {
-        case 1:
+        case MENU_UPDATE_UNITS:
             updateMedicineUnits(medicines, medicineCount);
             break;
-        case 2:
+        case MENU_PRINT_REPORT:
             printFullReport(medicines, medicineCount);
             break;
-        case 3:
+        case MENU_EXIT:
             cout << "Exiting program. Goodbye!" << endl;
             break;
         default:
-            cout << "Invalid choice. Please select 1, 2 or 3." << endl;
+            cout << "Invalid choice. Please select " << MENU_UPDATE_UNITS
+                 << ", " << MENU_PRINT_REPORT << " or " << MENU_EXIT << "." << endl;
         }
 
-    } while (choice != 3);
+    } while (choice != MENU_EXIT);
 
     return 0;
 }
@@ -163,10 +182,10 @@ int readMedicinesFromFile(const string &filename, Medicine medicines[], int maxS
 // Calculates (does NOT store) the status of a medicine based on units.
 string getStatus(int units)
 {
-    if (units > 0)
+    if (units > OUT_OF_STOCK_UNITS)
     {
         stringstream ss;
-        ss << "[" << units << " units] Available";
+        ss << units << " units Available";
         return ss.str();
     }
     else
@@ -218,20 +237,23 @@ void updateMedicineUnits(Medicine medicines[], int count)
 // Prints a table of all medicines: ID, Name, Status
 void printMedicineTable(const Medicine medicines[], int count)
 {
-    cout << "\n---------------------------------------------------------------" << endl;
-    cout << left << setw(10) << "ID"
-         << setw(25) << "Name"
-         << setw(25) << "Status" << endl;
-    cout << "---------------------------------------------------------------" << endl;
+    string separator(TABLE_WIDTH, '-');
+
+    cout << "\n"
+         << separator << endl;
+    cout << left << setw(ID_COLUMN_WIDTH) << "ID"
+         << setw(NAME_COLUMN_WIDTH) << "Name"
+         << setw(STATUS_COLUMN_WIDTH) << "Status" << endl;
+    cout << separator << endl;
 
     for (int i = 0; i < count; i++)
     {
-        cout << left << setw(10) << medicines[i].id
-             << setw(25) << medicines[i].name
-             << setw(25) << getStatus(medicines[i].unitsAvailable) << endl;
+        cout << left << setw(ID_COLUMN_WIDTH) << medicines[i].id
+             << setw(NAME_COLUMN_WIDTH) << medicines[i].name
+             << setw(STATUS_COLUMN_WIDTH) << getStatus(medicines[i].unitsAvailable) << endl;
     }
 
-    cout << "---------------------------------------------------------------" << endl;
+    cout << separator << endl;
 }
 
 // Returns the sum of units available across all medicines.
@@ -270,7 +292,7 @@ double calculateOutOfStockPercentage(const Medicine medicines[], int count)
 
     for (int i = 0; i < count; i++)
     {
-        if (medicines[i].unitsAvailable == 0)
+        if (medicines[i].unitsAvailable == OUT_OF_STOCK_UNITS)
         {
             outOfStockCount++;
         }
@@ -281,7 +303,7 @@ double calculateOutOfStockPercentage(const Medicine medicines[], int count)
         return 0.0;
     }
 
-    return (static_cast<double>(outOfStockCount) / count) * 100.0;
+    return (static_cast<double>(outOfStockCount) / count) * PERCENTAGE_MULTIPLIER;
 }
 
 // Prints the complete stock report requested in the assignment:
