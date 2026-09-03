@@ -1,18 +1,29 @@
+// Authors: Ayush Kirpal and nameOfStudent2
+// Student ID: S11250489 and studentID2
+// Date created: 29th August 2026
+// Version: 1.5
+
+// About this program:
 /*
- * USP Pharmacy - Medicine Stock Management System
- * ------------------------------------------------
- * Reads medicine records (ID, Name, Units) from a text file into an
- * array of structs, allows the user to update stock units, and prints
- * a full stock report.
- *
- * Data file format (one medicine per line):
- *     ID,Name,Units
- * e.g.
- *     3001,Paracetamol,5
- *
- * Written for Dev C++ 4.9.9 (plain C++ / C++98 style - no STL containers
- * other than string, no C++11 features).
- */
+    USP Pharmacy Stock Management System
+    ----------------------------------------
+    This program reads medicine records from a text file, allows the user to update stock units,
+    and prints a full stock report. Each medicine record consists of an ID, name and the number of units availabe.
+
+    For example, the data file "medicines.txt" may contain:
+    3001,Paracetamol,5
+    3002,Ibuprofen,0
+
+    The program will read these records into an array of structs, and provide the following functionality:
+
+    1. Update the number of units available for a specific medicine by ID.
+    2. Print a full stock report, including:
+        - A table of all medicines with their ID, name, and status (available or out
+        - The total number of units in stock across all medicines.
+        - The medicine with the highest number of units available (full details).
+        - The percentage of medicines that are out of stock.
+    The program uses C++17 features and follows best practices for file I/O, string manipulation, and user interaction.
+*/
 
 #include <iostream>
 #include <fstream>
