@@ -1,5 +1,4 @@
 /*
-    CS112: Data Structures & Algorithms - Assignment 1 (Semester II, 2026)
     USP Pharmacy Stock Management System
 
     Description:
@@ -22,28 +21,28 @@
 using namespace std;
 
 // -------------------- Constants --------------------
-const int MAX_MEDICINES = 100;      // Maximum records the array can hold
-const string DATA_FILE   = "medicines.txt";
+const int MAX_MEDICINES = 100; // Maximum records the array can hold
+const string DATA_FILE = "medicines.txt";
 
 // -------------------- Struct Definition --------------------
 struct Medicine
 {
-    int    id;
+    int id;
     string name;
-    int    units;
+    int units;
 };
 
 // -------------------- Function Prototypes --------------------
-int    readMedicinesFromFile(Medicine list[], int maxSize, const string &filename);
+int readMedicinesFromFile(Medicine list[], int maxSize, const string &filename);
 string getStatus(int units);
-int    findMedicineById(Medicine list[], int count, int id);
-bool   updateMedicineUnits(Medicine list[], int count, int id, int newUnits);
-void   printMedicineTable(Medicine list[], int count);
-int    getTotalUnits(Medicine list[], int count);
-int    getHighestStockIndex(Medicine list[], int count);
+int findMedicineById(Medicine list[], int count, int id);
+bool updateMedicineUnits(Medicine list[], int count, int id, int newUnits);
+void printMedicineTable(Medicine list[], int count);
+int getTotalUnits(Medicine list[], int count);
+int getHighestStockIndex(Medicine list[], int count);
 double getOutOfStockPercentage(Medicine list[], int count);
-void   printMainMenu();
-void   pauseScreen();
+void printMainMenu();
+void pauseScreen();
 string intToStr(int value);
 
 // -------------------- main() --------------------
@@ -73,98 +72,99 @@ int main()
         {
             cin.clear();
             cin.ignore(1000, '\n');
-            cout << "\nInvalid input. Please enter a number between 1 and 6.\n" << endl;
+            cout << "\nInvalid input. Please enter a number between 1 and 6.\n"
+                 << endl;
             continue;
         }
 
         switch (choice)
         {
-            case 1:
-                cout << endl;
-                printMedicineTable(medicines, medicineCount);
-                break;
+        case 1:
+            cout << endl;
+            printMedicineTable(medicines, medicineCount);
+            break;
 
-            case 2:
+        case 2:
+        {
+            int total = getTotalUnits(medicines, medicineCount);
+            cout << "\nTotal number of units in stock: " << total << endl;
+            break;
+        }
+
+        case 3:
+        {
+            int idx = getHighestStockIndex(medicines, medicineCount);
+            if (idx == -1)
             {
-                int total = getTotalUnits(medicines, medicineCount);
-                cout << "\nTotal number of units in stock: " << total << endl;
+                cout << "\nNo records available." << endl;
+            }
+            else
+            {
+                cout << "\nMedicine with the highest number of units available:" << endl;
+                cout << "  Medicine ID : " << medicines[idx].id << endl;
+                cout << "  Name        : " << medicines[idx].name << endl;
+                cout << "  Units       : " << medicines[idx].units << endl;
+                cout << "  Status      : " << getStatus(medicines[idx].units) << endl;
+            }
+            break;
+        }
+
+        case 4:
+        {
+            double pct = getOutOfStockPercentage(medicines, medicineCount);
+            cout << "\nPercentage of medicines currently Out of Stock: "
+                 << fixed << setprecision(2) << pct << "%" << endl;
+            break;
+        }
+
+        case 5:
+        {
+            int id, newUnits;
+            cout << "\nEnter the Medicine ID to update: ";
+            cin >> id;
+
+            if (cin.fail())
+            {
+                cin.clear();
+                cin.ignore(1000, '\n');
+                cout << "Invalid Medicine ID entered." << endl;
                 break;
             }
 
-            case 3:
+            int idx = findMedicineById(medicines, medicineCount, id);
+            if (idx == -1)
             {
-                int idx = getHighestStockIndex(medicines, medicineCount);
-                if (idx == -1)
-                {
-                    cout << "\nNo records available." << endl;
-                }
-                else
-                {
-                    cout << "\nMedicine with the highest number of units available:" << endl;
-                    cout << "  Medicine ID : " << medicines[idx].id << endl;
-                    cout << "  Name        : " << medicines[idx].name << endl;
-                    cout << "  Units       : " << medicines[idx].units << endl;
-                    cout << "  Status      : " << getStatus(medicines[idx].units) << endl;
-                }
+                cout << "No medicine found with ID " << id << "." << endl;
                 break;
             }
 
-            case 4:
+            cout << "Current units for " << medicines[idx].name
+                 << " (ID " << id << "): " << medicines[idx].units << endl;
+            cout << "Enter the new number of units: ";
+            cin >> newUnits;
+
+            if (cin.fail() || newUnits < 0)
             {
-                double pct = getOutOfStockPercentage(medicines, medicineCount);
-                cout << "\nPercentage of medicines currently Out of Stock: "
-                     << fixed << setprecision(2) << pct << "%" << endl;
+                cin.clear();
+                cin.ignore(1000, '\n');
+                cout << "Invalid number of units entered. Update cancelled." << endl;
                 break;
             }
 
-            case 5:
-            {
-                int id, newUnits;
-                cout << "\nEnter the Medicine ID to update: ";
-                cin >> id;
+            updateMedicineUnits(medicines, medicineCount, id, newUnits);
+            cout << "Stock updated successfully. " << medicines[idx].name
+                 << " now has " << medicines[idx].units << " units ("
+                 << getStatus(medicines[idx].units) << ")." << endl;
+            break;
+        }
 
-                if (cin.fail())
-                {
-                    cin.clear();
-                    cin.ignore(1000, '\n');
-                    cout << "Invalid Medicine ID entered." << endl;
-                    break;
-                }
+        case 6:
+            cout << "\nExiting program. Goodbye!" << endl;
+            break;
 
-                int idx = findMedicineById(medicines, medicineCount, id);
-                if (idx == -1)
-                {
-                    cout << "No medicine found with ID " << id << "." << endl;
-                    break;
-                }
-
-                cout << "Current units for " << medicines[idx].name
-                     << " (ID " << id << "): " << medicines[idx].units << endl;
-                cout << "Enter the new number of units: ";
-                cin >> newUnits;
-
-                if (cin.fail() || newUnits < 0)
-                {
-                    cin.clear();
-                    cin.ignore(1000, '\n');
-                    cout << "Invalid number of units entered. Update cancelled." << endl;
-                    break;
-                }
-
-                updateMedicineUnits(medicines, medicineCount, id, newUnits);
-                cout << "Stock updated successfully. " << medicines[idx].name
-                     << " now has " << medicines[idx].units << " units ("
-                     << getStatus(medicines[idx].units) << ")." << endl;
-                break;
-            }
-
-            case 6:
-                cout << "\nExiting program. Goodbye!" << endl;
-                break;
-
-            default:
-                cout << "\nInvalid choice. Please select an option between 1 and 6." << endl;
-                break;
+        default:
+            cout << "\nInvalid choice. Please select an option between 1 and 6." << endl;
+            break;
         }
 
         if (choice != 6)
@@ -180,7 +180,7 @@ int main()
 // -------------------- Function Definitions --------------------
 /*
     Reads medicine records from a comma separated text file into the
-    given array of structs. 
+    given array of structs.
 */
 int readMedicinesFromFile(Medicine list[], int maxSize, const string &filename)
 {
@@ -209,12 +209,12 @@ int readMedicinesFromFile(Medicine list[], int maxSize, const string &filename)
             continue; // skip malformed lines
         }
 
-        string idPart    = line.substr(0, firstComma);
-        string namePart   = line.substr(firstComma + 1, secondComma - firstComma - 1);
+        string idPart = line.substr(0, firstComma);
+        string namePart = line.substr(firstComma + 1, secondComma - firstComma - 1);
         string unitsPart = line.substr(secondComma + 1);
 
-        list[count].id    = atoi(idPart.c_str());
-        list[count].name  = namePart;
+        list[count].id = atoi(idPart.c_str());
+        list[count].name = namePart;
         list[count].units = atoi(unitsPart.c_str());
 
         count++;
@@ -372,10 +372,10 @@ void printMainMenu()
     cout << "5. Update units for a medicine" << endl;
     cout << "6. Exit" << endl;
     cout << "======================================" << endl;
-}/*
-    Pauses the program until the user presses Enter, so that
-    output can be read before the menu is shown again.
-*/
+} /*
+     Pauses the program until the user presses Enter, so that
+     output can be read before the menu is shown again.
+ */
 void pauseScreen()
 {
     cout << "Press Enter to continue...";
