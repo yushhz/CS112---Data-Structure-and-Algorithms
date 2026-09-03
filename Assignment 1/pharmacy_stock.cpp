@@ -1,7 +1,7 @@
 // Authors: Ayush Kirpal and nameOfStudent2
 // Student ID: S11250489 and studentID2
 // Date created: 29th August 2026
-// Version: 1.8
+// Version: 1.9
 
 // About this program:
 /*
@@ -186,7 +186,7 @@ string getStatus(int units)
     if (units > OUT_OF_STOCK_UNITS)
     {
         stringstream ss;
-        ss << units << " units Available";
+        ss << "[" << units << " units] Available";
         return ss.str();
     }
     else
