@@ -63,8 +63,7 @@ struct Medicine
     int unitsAvailable;
 };
 
-// Function prototypes
-
+// Function prototypes/declarations
 int readMedicinesFromFile(const string &filename, Medicine medicines[], int maxSize);
 string getStatus(int units);
 void updateMedicineUnits(Medicine medicines[], int count);
