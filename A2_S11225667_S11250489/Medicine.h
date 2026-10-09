@@ -1,3 +1,8 @@
+// Medicine.h - Medicine class
+// Stores one medicine record (ID, name, units). The availability status is
+// calculated from the units whenever it is needed and is never stored.
+// Two medicines are equal if their IDs match, which lets List::search() find by ID.
+
 #ifndef MEDICINE_H
 #define MEDICINE_H
 

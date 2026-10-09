@@ -1,3 +1,37 @@
+// Authors: Riyashna Prasad and Ayush Kirpal
+// Student ID: S11225667 and S11250489
+// Date created: 7th October 2026
+// Version: 1.10
+
+// About this program:
+/*
+    USP Pharmacy Stock Management System
+    ----------------------------------------
+    This program reads medicine records from a text file, allows the user to update stock units,
+    and prints a full stock report. Each medicine record consists of an ID, name and the number of units available.
+
+    For example, the data file "medicines.txt" may contain:
+    3001,Paracetamol,5
+    3002,Ibuprofen,0
+
+    The program will read these records into a linked list of Medicine objects (using the generic
+    List and Node classes), and provide the following functionality:
+
+        1. View a table of all medicines with their availability status
+        2. View the total number of units in stock
+        3. View the medicine with the highest number of units available
+        4. View the percentage of medicines that are out of stock
+        5. Update the number of units for a medicine (by Medicine ID)
+
+    Files in this program:
+        main.cpp   - driver file: reads the data file, shows the menu and runs the chosen option
+        Medicine.h - Medicine class (ID, name, units; status is calculated, not stored)
+        List.h     - generic LinkedList class that manages the nodes
+        Node.h     - generic Node class that holds one item and a pointer to the next node
+*/
+
+// Libraries and header files used for input/output, file handling
+// string operations, formatting, and the Medicine linked list.
 #include <iostream>
 #include <fstream>
 #include <string>
@@ -11,8 +45,10 @@
 
 using namespace std;
 
+// File containing the medicine records
 const string DATA_FILE = "medicines.txt";
 
+// Constants for menu options, table formatting, and input handling
 const int MENU_SHOW_TABLE = 1;
 const int MENU_SHOW_TOTAL = 2;
 const int MENU_SHOW_HIGHEST_STOCK = 3;
@@ -43,9 +79,11 @@ void pauseScreen();
 // Main function
 int main()
 {
+  // Create a linked list to hold the medicine records and read them from the data file
   List<Medicine> medicines;
   int medicineCount = readMedicinesFromFile(medicines, DATA_FILE);
 
+  // If no records were read, inform the user and exit the program
   if (medicineCount == 0)
   {
     cout << "No medicine records could be read from \"" << DATA_FILE << "\"." << endl;
@@ -53,8 +91,10 @@ int main()
     return 0;
   }
 
+  // Inform the user how many records were loaded and enter the main menu loop
   cout << "Loaded " << medicineCount << " medicine record(s) from \"" << DATA_FILE << "\"." << endl;
 
+  // Main menu loop: keep showing the menu and acting on the user's choice until they select the "Exit" option.
   int choice = 0;
   do
   {
@@ -72,6 +112,7 @@ int main()
       continue;
     }
 
+    // Handle the user's menu choice using a switch statement
     switch (choice)
     {
     case MENU_SHOW_TABLE:
@@ -109,6 +150,7 @@ int main()
       break;
     }
 
+    // Pause after every action except exiting, so the user has a chance to read the output before the menu reprints and they are prompted again.
     if (choice != MENU_EXIT)
     {
       cout << endl;
@@ -120,10 +162,8 @@ int main()
   return 0;
 }
 
-/*
-    Reads "ID,Name,Units" lines into the linked list. Empty or malformed
-    lines are skipped. Returns the number of records read.
-*/
+// Reads "ID,Name,Units" lines into the linked list. Empty or malformed
+// lines are skipped. Returns the number of records read.
 int readMedicinesFromFile(List<Medicine> &list, const string &filename)
 {
   ifstream inFile(filename.c_str());
@@ -225,6 +265,7 @@ void printHighestStock(const List<Medicine> &list)
     }
   }
 
+  // // Create a linked list and load the medicine records from the file.
   const Medicine &m = list.getAt(highestIdx);
   cout << "Medicine with the highest number of units available:" << endl;
   cout << "  Medicine ID : " << m.getId() << endl;
@@ -232,7 +273,7 @@ void printHighestStock(const List<Medicine> &list)
   cout << "  Units       : " << m.getUnits() << endl;
   cout << "  Status      : " << m.getStatus() << endl;
 }
-
+// Calculates the percentage of medicines that are out of stock (units == 0).
 double getOutOfStockPercentage(const List<Medicine> &list)
 {
   if (list.isEmpty())
@@ -251,6 +292,7 @@ double getOutOfStockPercentage(const List<Medicine> &list)
   return (double(outOfStock) / double(list.size())) * PERCENTAGE_MULTIPLIER;
 }
 
+// Prompts the user for a Medicine ID and new units, searches for the medicine in the list, and updates its units if found.
 void updateUnits(List<Medicine> &list)
 {
   int id, newUnits;
@@ -292,6 +334,7 @@ void updateUnits(List<Medicine> &list)
        << m->getStatus() << ")." << endl;
 }
 
+// Displays the main menu options to the user. The option numbers printed here match the MENU_* constants used in the switch statement in main(), so the two can never fall out of step.
 void printMainMenu()
 {
   cout << "======================================" << endl;
@@ -306,6 +349,7 @@ void printMainMenu()
   cout << "======================================" << endl;
 }
 
+// Pauses the program and waits for the user to press Enter before continuing. This is used after displaying results so the user has time to read them before the menu reappears.
 void pauseScreen()
 {
   cout << "Press Enter to continue...";

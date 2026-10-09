@@ -1,3 +1,5 @@
+In terminal
+
 cd A2_S11225667_S11250489
 g++ main.cpp -o pharmacy
 ./pharmacy

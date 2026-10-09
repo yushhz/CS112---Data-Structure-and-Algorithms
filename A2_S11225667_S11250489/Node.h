@@ -1,3 +1,6 @@
+// Node.h - Generic node class
+// Holds one item of any data type and a pointer to the next node in the list.
+
 #ifndef NODE_H
 #define NODE_H
 

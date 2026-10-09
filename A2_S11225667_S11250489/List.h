@@ -1,3 +1,8 @@
+// List.h - Generic singly linked list class
+// Manages a chain of Node objects and works with any data type.
+// Supports adding to the end, getting an item by position, searching,
+// and clearing. Nodes are freed automatically by the destructor.
+
 #ifndef LIST_H
 #define LIST_H
 
